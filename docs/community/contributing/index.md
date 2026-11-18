@@ -22,6 +22,34 @@ _Docker Agent is open source. Here's how to set up your development environment 
 >
 > macOS and Linux are fully supported for development. On Windows, use `task build-local` to build via Docker.
 
+### Check your Windows environment
+
+Before building on Windows, start Docker Desktop with Linux containers enabled
+and check the required tools in PowerShell:
+
+```powershell
+go version
+task --version
+golangci-lint version
+docker version
+```
+
+`docker version` must show both Client and Server information. If the Server
+connection fails, wait for Docker Desktop to finish starting and check that the
+selected Docker context points to the intended engine with `docker context ls`.
+If PowerShell cannot find Task or golangci-lint, install the prerequisites above
+and open a new terminal so it picks up the updated PATH.
+
+Run `task build-local` from the repository root to build through Docker. Building
+the binary does not replace validation: run `task test` and `task lint` in a
+configured development environment, or inspect the corresponding CI results for
+your commit.
+
+For GitHub CLI operations, check `gh auth status` separately. If it reports an
+invalid token, authenticate with `gh auth login` before using GitHub CLI to create
+pull requests or start workflows. A successful local build does not verify
+registry access or image publication.
+
 ### Build from Source
 
 ```bash
