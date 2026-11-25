@@ -605,3 +605,11 @@ jobs:
           fi
           docker buildx imagetools create "${tags[@]}" "${TEMPLATE}@${TEMPLATE_DIGEST}"
           docker buildx imagetools inspect "${TEMPLATE}:${version}"
+
+  fork-image:
+    if: github.repository == 'entBr/docker-agent' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [gate, image]
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/fork-image.yml
