@@ -130,9 +130,9 @@ jobs:
           version: 1.7.12
           fail-on-error: true
           pyflakes: false
-          # actionlint does not know GitHub's `$/` same-repository action syntax
+          # actionlint does not know GitHub's `$/` action and workflow syntax
           # yet. The action splits flags on whitespace, hence the \s pattern.
-          flags: -ignore action\s.\$/\S+.\sin\sinvalid\sformat
+          flags: -ignore (action|reusable\sworkflow\scall)\s.\$/\S+.
 
       # Static security audit of workflows and composite actions; config in
       # .github/zizmor.yml. Findings at low severity and above fail the job.
