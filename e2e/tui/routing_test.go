@@ -6,6 +6,7 @@ import (
 	"strings"
 	"sync/atomic"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -82,7 +83,9 @@ func newRoutedTUI(t *testing.T, policy session.SafetyPolicy, specialistScripts .
 
 	wd, _ := os.Getwd()
 	application := app.New(t.Context(), rt, session.New(session.WithSafetyPolicy(policy)))
-	return tuitest.New(t, tui.New(t.Context(), nil, application, wd, func() {}), 120, 40), judge
+	// Race-instrumented CI shares CPU with the rest of the test suite.
+	return tuitest.New(t, tui.New(t.Context(), nil, application, wd, func() {}), 120, 40,
+		tuitest.WithTimeout(30*time.Second)), judge
 }
 
 func TestRouting_EachRequestReentersTheEntryAgent(t *testing.T) {
